@@ -39,7 +39,7 @@ Place your PNG as `cloud/Arsitektur-Microservices.drawio.png` for GitHub to rend
 
 ---
 
-### Component‑by‑Component Explanation (Refined)
+### Component‑by‑Component Explanation
 
 - **Amazon Route 53 & CloudFront**
   - Users reach the application via Route 53, which routes traffic to CloudFront. As a CDN, CloudFront serves static content (images, CSS, JS) from edge locations closest to users, materially reducing latency.
@@ -67,7 +67,7 @@ Place your PNG as `cloud/Arsitektur-Microservices.drawio.png` for GitHub to rend
 
 ---
 
-### Rationale for AWS Service Choices (Refined)
+### Rationale for AWS Service Choices
 
 - **ECS on Fargate vs. EKS (Kubernetes)**
   - Fargate is chosen for operational simplicity and lower starting cost. It lets the team focus on application development without deep Kubernetes expertise. It delivers strong scalability and security out of the box. EKS is a fit for organizations standardized on Kubernetes or those requiring a highly customized ecosystem.
@@ -80,7 +80,7 @@ Place your PNG as `cloud/Arsitektur-Microservices.drawio.png` for GitHub to rend
 
 ---
 
-### Security Approach (Refined)
+### Security Approach
 
 - **Network Isolation**
   - VPC with public and private subnets is the foundation. Only the components that must be internet‑facing (ALB) are placed in public subnets. Security Groups act as stateful firewalls and allow only necessary flows between services (for example, only the User Service can connect to Aurora on port 3306).
