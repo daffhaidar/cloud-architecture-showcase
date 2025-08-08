@@ -10,9 +10,7 @@ This case study presents a production‑minded RAG architecture that ingests ent
 
 ### Architecture (PNG)
 
-![RAG Architecture](./Arsitektur-RAG.drawio.png)
-
-Place your PNG as `rag/Arsitektur-RAG.drawio.png` for GitHub to render.
+![RAG Architecture](./RAG.drawio.png)
 
 ---
 
@@ -44,12 +42,14 @@ DAF is exploring a Retrieval‑Augmented Generation (RAG) system that indexes in
 To meet these requirements, I designed a layered architecture with two main pipelines—Indexing and Inference—plus supporting CI/CD and observability services.
 
 - Indexing Pipeline
+
   - Data Sources: Internal documents stored in Amazon S3 (portable to GCS/Azure Blob). New or updated objects trigger ingestion.
   - Preprocessing & Chunking Service (ECS Fargate): Normalizes formats (PDF/HTML/Office), cleans text, chunks content, extracts metadata, and handles PII redaction if needed. Packaged as a container for portability; can run on Kubernetes or serverless as well.
   - Embedding Model Endpoint (Amazon SageMaker): Generates vector embeddings for chunks. Supports hot‑swapping to other providers (Bedrock, Hugging Face Inference Endpoints) or self‑hosted open‑source models (e.g., Instructor, E5) to remain vendor‑agnostic.
   - Vector Database (OpenSearch Vector): Stores vectors and metadata; enables similarity search with filters and access control. Interchangeable with Qdrant, Weaviate, or Redis Vector to meet portability or performance/feature needs.
 
 - Inference Pipeline
+
   - RAG API Endpoint (Amazon API Gateway): Exposes an authenticated REST interface for query requests from applications.
   - RAG Orchestration Service (ECS Fargate): Implements retrieval and prompt composition using LangChain or Haystack. Steps: vectorize user query → retrieve top‑k context → build grounded prompt → call LLM → return final response with citations.
   - LLM Endpoint (SageMaker): Large Language Model endpoint (can be managed or fine‑tuned). Pluggable to Bedrock, OpenAI, or a self‑hosted OSS model on ECS/EKS/GKE/AKS for full vendor neutrality.
@@ -63,9 +63,11 @@ To meet these requirements, I designed a layered architecture with two main pipe
 ### Component Justification
 
 - LangChain / Haystack
+
   - Provide composable building blocks for retrieval, reranking, prompt templating, and evaluation. LangChain has a broad connector ecosystem; Haystack offers a strong pipeline abstraction and retriever‑generator patterns.
 
 - Vector Store: OpenSearch Vector vs Qdrant vs Weaviate vs Redis Vector
+
   - OpenSearch Vector: Managed search engine with vector and keyword search, filtering, and enterprise features (IAM, VPC). Good when you already use OpenSearch.
   - Qdrant: High‑performance vector DB with HNSW, payload filtering; easy to self‑host; strong OSS community.
   - Weaviate: Rich schema, hybrid search (BM25+vector), modular; managed and OSS options.
@@ -73,6 +75,7 @@ To meet these requirements, I designed a layered architecture with two main pipe
   - Choice depends on scale, ops model, hybrid search needs, and ecosystem fit. The design keeps the retriever behind an interface to swap implementations without app rewrites.
 
 - LLM: Open‑source vs Managed
+
   - Managed (SageMaker/Bedrock): Simpler ops, autoscaling, and GPU abstraction; pay‑as‑you‑go.
   - Open‑source (Mixtral/Llama variants) on ECS/EKS: Full control, tunable cost/perf, and data locality; requires GPU capacity planning.
 
@@ -133,4 +136,4 @@ To meet these requirements, I designed a layered architecture with two main pipe
 
 - IaC via Terraform/CDK to provision networking, ECS services, OpenSearch/Qdrant, SageMaker endpoints, and CI/CD
 - Add reranker (e.g., Cohere Rerank, bge‑reranker) if retrieval precision needs improvement
-- Add evaluation harness (answer faithfulness/groundedness) to gate deployments 
+- Add evaluation harness (answer faithfulness/groundedness) to gate deployments

@@ -46,7 +46,7 @@ Preview:
 ```
 cloud-architecture-showcase/
 ├─ README.md                        # This file
-├─ cloud/
+├─ Arsitektur-Microservices/
 │  ├─ README.md                     # Case Study 1: AWS Microservices on ECS Fargate
 │  └─ Arsitektur-Microservices.drawio.png  # Diagram (PNG)
 └─ rag/
