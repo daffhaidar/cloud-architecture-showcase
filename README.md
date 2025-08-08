@@ -20,8 +20,24 @@ Preview:
 
 ![AWS Microservices – ECS on Fargate](cloud/Arsitektur-Microservices.drawio.png)
 
-- Read the full write‑up: `cloud/README.md`
-- Diagram source: `cloud/Arsitektur-Microservices.drawio.png` (created with diagrams.net/draw.io)
+- Read the full write‑up: `Arsitektur-Microservices/README.md`
+- Diagram source: `Arsitektur-Microservices/Arsitektur-Microservices.drawio.png` (created with diagrams.net/draw.io)
+
+---
+
+- **Case Study 2 – Retrieval‑Augmented Generation (RAG) on AWS (Vendor‑Agnostic)**
+  - Ingestion from internal stores (S3/GCS/Azure Blob)
+  - Preprocessing & chunking → embeddings → vector database (OpenSearch Vector/Qdrant/Weaviate/Redis Vector)
+  - RAG orchestration with LangChain/Haystack; LLM endpoint (SageMaker/Bedrock or OSS self‑hosted)
+  - API Gateway front door; ECS Fargate services; CloudWatch observability
+  - CI/CD: CodeCommit → CodePipeline → CodeBuild → ECR → ECS; model/prompt versioning
+
+Preview:
+
+![RAG – Vendor‑Agnostic](rag/RAG.drawio.png)
+
+- Read the full write‑up: `RAG/README.md`
+- Diagram source: `RAG/RAG.drawio.png`
 
 ---
 
@@ -30,9 +46,12 @@ Preview:
 ```
 cloud-architecture-showcase/
 ├─ README.md                        # This file
-└─ cloud/
-   ├─ README.md                     # Case Study 1: AWS Microservices on ECS Fargate
-   └─ Arsitektur-Microservices.drawio.png  # Diagram (PNG)
+├─ cloud/
+│  ├─ README.md                     # Case Study 1: AWS Microservices on ECS Fargate
+│  └─ Arsitektur-Microservices.drawio.png  # Diagram (PNG)
+└─ rag/
+   ├─ README.md                     # Case Study 2: RAG on AWS (vendor-agnostic)
+   └─ RAG.drawio.png                # Diagram (PNG)
 ```
 
 ---
@@ -56,5 +75,5 @@ cloud-architecture-showcase/
 
 ### Contact
 
-- Maintainer: Daffa Haidar
-- Feedback and ideas are welcome—open an issue or PR. 
+- Maintainer: Muhammad Daffa Haidar Falah
+- Feedback and ideas are welcome—open an issue or PR.

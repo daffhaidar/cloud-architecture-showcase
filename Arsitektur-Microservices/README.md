@@ -31,35 +31,34 @@ This document presents my solution for the case study: a high‑performance micr
 
 ---
 
-### Architecture (PNG)
-
-![Architecture – ECS on Fargate](./Arsitektur-Microservices.drawio.png)
-
-Place your PNG as `cloud/Arsitektur-Microservices.drawio.png` for GitHub to render it in this README.
-
----
-
 ### Component‑by‑Component Explanation
 
 - **Amazon Route 53 & CloudFront**
+
   - Users reach the application via Route 53, which routes traffic to CloudFront. As a CDN, CloudFront serves static content (images, CSS, JS) from edge locations closest to users, materially reducing latency.
 
 - **Application Load Balancer (ALB)**
+
   - Deployed in public subnets as the primary entry point from CloudFront. ALB terminates TLS and intelligently distributes requests to the appropriate microservice using path‑based routing (for example, `/users` → User Service, `/payments` → Payment Service).
 
 - **Amazon ECS on AWS Fargate**
+
   - Each microservice (User, Payment, Notification) runs as a Docker container orchestrated by ECS with the Fargate launch type. Fargate is serverless for containers—no server management is required. AWS handles provisioning, patching, and scaling of the underlying infrastructure.
 
 - **Private Subnets**
+
   - All microservices and databases are placed in private subnets and are not directly reachable from the internet. This is a foundational security practice that protects the application and data layers.
 
 - **Polyglot Persistence (Aurora & DynamoDB)**
+
   - The architecture applies the best database for each service. Amazon Aurora (MySQL/PostgreSQL‑compatible) stores relational data that requires consistency (for example, user data). Amazon DynamoDB (NoSQL) is used for ultra‑low latency and high throughput workloads (for example, payment logs or notification metadata).
 
 - **Amazon SQS & ElastiCache**
+
   - Amazon SQS enables asynchronous, decoupled communication between services, improving resilience and enabling smoothing of traffic spikes. Amazon ElastiCache provides in‑memory caching to reduce database read pressure and accelerate response times for hot paths.
 
 - **CI/CD Pipeline (AWS CodeSuite)**
+
   - Developers push code to AWS CodeCommit, which triggers AWS CodePipeline. AWS CodeBuild compiles, tests, and builds Docker images, then stores them in Amazon ECR (Elastic Container Registry). The pipeline deploys the new version to Amazon ECS safely.
 
 - **Amazon CloudWatch**
@@ -70,9 +69,11 @@ Place your PNG as `cloud/Arsitektur-Microservices.drawio.png` for GitHub to rend
 ### Rationale for AWS Service Choices
 
 - **ECS on Fargate vs. EKS (Kubernetes)**
+
   - Fargate is chosen for operational simplicity and lower starting cost. It lets the team focus on application development without deep Kubernetes expertise. It delivers strong scalability and security out of the box. EKS is a fit for organizations standardized on Kubernetes or those requiring a highly customized ecosystem.
 
 - **Application Load Balancer (ALB) vs. API Gateway**
+
   - ALB is the primary load balancer due to its efficiency and cost‑effectiveness for high‑throughput HTTP/S traffic. API Gateway excels at API management—third‑party authentication, rate limiting, and response caching—and can be placed in front of ALB if those features become critical later.
 
 - **Amazon Aurora vs. Standard RDS**
@@ -83,12 +84,15 @@ Place your PNG as `cloud/Arsitektur-Microservices.drawio.png` for GitHub to rend
 ### Security Approach
 
 - **Network Isolation**
+
   - VPC with public and private subnets is the foundation. Only the components that must be internet‑facing (ALB) are placed in public subnets. Security Groups act as stateful firewalls and allow only necessary flows between services (for example, only the User Service can connect to Aurora on port 3306).
 
 - **IAM (Identity and Access Management)**
+
   - The principle of least privilege is strictly enforced. Each ECS service runs with its own IAM role containing only the permissions it truly needs (for example, the Payment Service has access only to its DynamoDB tables).
 
 - **Secrets Management**
+
   - Sensitive information—database credentials, API keys, tokens—is never stored in code. All secrets are stored and rotated securely using AWS Secrets Manager and accessed at runtime through IAM roles.
 
 - **Encryption**
@@ -114,4 +118,4 @@ Place your PNG as `cloud/Arsitektur-Microservices.drawio.png` for GitHub to rend
 
 ---
 
-This ECS on Fargate solution delivers low latency via CloudFront and ALB, scales horizontally with serverless containers, remains resilient through decoupled asynchronous processing, and maintains strong security and observability by design. If you want a diagrams.net/Lucidchart version of the diagram or portfolio‑style wording tweaks, I can add those next.
+This ECS on Fargate solution delivers low latency via CloudFront and ALB, scales horizontally with serverless containers, remains resilient through decoupled asynchronous processing, and maintains strong security and observability by design.
