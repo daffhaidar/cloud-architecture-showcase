@@ -18,7 +18,7 @@ A portfolio-friendly collection of cloud architecture case studies and diagrams.
 
 Preview:
 
-![AWS Microservices – ECS on Fargate](cloud/Arsitektur-Microservices.drawio.png)
+![AWS Microservices – ECS on Fargate](Arsitektur-Microservices.drawio.png)
 
 - Read the full write‑up: `Arsitektur-Microservices/README.md`
 - Diagram source: `Arsitektur-Microservices/Arsitektur-Microservices.drawio.png` (created with diagrams.net/draw.io)
